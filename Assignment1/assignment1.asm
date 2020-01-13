@@ -25,7 +25,7 @@ section .text
 global _start
 _start:
 	mov rsi, array
-	xor rax, rax
+	xor rax, rax			;clear register
 label1:
 	mov al, byte[rsi]
 	bt rax, 07			;test the 7th bit, ie. MSB

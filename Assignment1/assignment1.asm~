@@ -39,8 +39,8 @@ l2:
 	dec byte[cnt]
 	jnz label1			;jump not zero 
 	
-	;add byte[pos], 30h
-	;add byte[neg], 30h	
+	add byte[pos], 30h
+	add byte[neg], 30h	
 
 	print msg1, len1		;print msg1
 	print pos, 1
