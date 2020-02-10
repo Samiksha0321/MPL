@@ -32,3 +32,11 @@ jnz loop1
 	mov rax, 60
 	mov rdi, 00h
 	syscall
+	
+
+	
+; To run this progream there are three steps, First;
+; $ nasm -f elf64 helloworld.asm
+; $ ld -o ass2 helloworld.o
+;$ ./ass2         
+
