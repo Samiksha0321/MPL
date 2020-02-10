@@ -32,24 +32,24 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 section .data
-	main:	db "Select one of the following", 0xA
-		db "1. HEX to BCD", 0xA
-		db "2. BCD to HEX", 0xA
-		db "3. EXIT", 0xA
-		db "Enter your choice: "
+	main:		db "Select one of the following", 0xA
+			db "1. HEX to BCD", 0xA
+			db "2. BCD to HEX", 0xA
+			db "3. EXIT", 0xA
+			db "Enter your choice: "
 	main_len:	equ	$-main
 	
 	
 	err_msg:	db	"Enter valid data: ", 0xA
-	err_len: equ $-err_msg
+	err_len:	equ	$-err_msg
 	
 	
-	msg1:	db	"Enter 4 digit HEX number: ", 0xA
-	msg1_len: equ $-msg1
+	msg1:		db	"Enter 4 digit HEX number: ", 0xA
+	msg1_len:	equ	$-msg1
 	
 	
-	msg2:	db	"Enter 5 digit BCD number: ", 0xA
-	msg2_len: equ $-msg2
+	msg2:		db	"Enter 5 digit BCD number: ", 0xA
+	msg2_len:	equ	$-msg2
 ______________________________________________________________________
 	
 section .bss

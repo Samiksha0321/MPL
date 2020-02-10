@@ -28,6 +28,13 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 section .data
+
+	main:	db	"Select the method: ", 0xA
+		db	"1. Successive Addition", 0xA
+		db	"2. Add and shift method", 0xA
+		db	"3. Booth's algo", 0xA
+	m_len:	equ	$-main
+	
 	msg1:	db	"Enter 1st hex number: "
 	len1:	equ	$-msg1
 	msg2:	db	"Enter 2nd hex number: "
@@ -40,11 +47,36 @@ section .bss
 	first	resb	1
 	second	resb	1
 	ans	resw	1
+	choice	resb	1
 ______________________________________________________________________
 
 section .text
 global _start
 _start:
+
+	print	main, len_main
+	read	choice, 2
+	mov	al, [choice]
+	
+c1:	cmp	al, '1'
+	jne	c2
+	call	Successive_Addition
+	jmp	_start
+	
+c2:	cmp	al, '2'
+	jne	c3
+	call 	Add_Shift_method
+	jmp	_start
+	
+c3:	cmp	al, '3'
+	jne	c4
+	call	Booth_algo	
+	jmp	_start
+	
+c4:	exit
+	
+	
+	
 	print	msg1, len1
 	read	first, 3		; 2 digit num + enter 
 	call	convert
@@ -52,9 +84,9 @@ _start:
 	
 	print	msg2, len2
 	read	second, 3		; 2 digit num+ enter 
-	call	convert
-	xor 	rcx, rcx
-	xor	rax, rax
+	call convert
+	xor rcx,rcx
+	xor rax,rax
 	mov	rax, [num1]
 	
 	print	msg3, len3
