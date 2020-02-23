@@ -90,18 +90,39 @@ c4:	exit
 	
 	
 ----------------------------------------------------------------------
-
+input_from_user:
 	print	msg1, len1
 	read	first, 3		; 2 digit num + enter 
-	call	convert
-	mov	[num1],bl
+	call	convert_ASCII_to_hex
 
-	
+	print	msg2, len2
+	read	second, 3
+	call	convert_ASCII_to_hex
+ret 
+
+convert_ASCII_to_hex:
+	mov	rsi, result
+	mov	byte[count], 10h
+	L:	rol	rax, 4
+		mov	bl, al
+		and	bl, 0Fh
+		cmp	bl, 09h
+		jbe	label
+		add	bl, 07h
+		label:	add	bl, 30h
+		mov	byte[rsi], bl
+		inc	rsi			
+		dec	byte[count]
+	jnz	L
+
+	print	result, 16
+ret
+		
+
 ----------------------------------------------------------------------
 
 Successive_Addition:
 	
- 
  
        
         mov rax,0
