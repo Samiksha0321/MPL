@@ -1,3 +1,13 @@
+%macro scall 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
+
+
+
 section .data
 msg0: db "1.Number of blank spaces :",0x0A
 len0: equ $-msg0
@@ -33,18 +43,12 @@ length2: resb 8
 length3: resb 8
 buffer: resb 1000
 
-%macro scall 4
-mov rax,%1
-mov rdi,%2
-mov rsi,%3
-mov rdx,%4
-syscall
-%endmacro
+
 
 section .text
 extern ent,spc,occ
-global main
-main:
+global _start
+_start:
 
 	scall 2,fname,2,0777
 	mov qword[fd],rax
