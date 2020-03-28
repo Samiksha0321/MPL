@@ -46,13 +46,13 @@ _start:
 		add r8, 08h
 		dec byte[cnt]
 	jnz L1
-					_
-	mov byte[cnt], 05h		 \
-	mov rsi, array1			 |
-	mov rdi, array2			 |
-	mov rcx, 5			 |
-	cld 				 |
-	rep movsq			_/ 
+					
+	mov byte[cnt], 05h		 
+	mov rsi, array1			 
+	mov rdi, array2			 
+	mov rcx, 5			 
+	cld 				 
+	rep movsq			
 							
 	print new, 1
 	print msg2, len2

@@ -47,15 +47,15 @@ _start:
 	jnz label1
 
 	print new, 1
-					_
-	mov byte[cnt1], 5h		 \
-	mov r8, array1			 |
-	mov r9, array2			 |
-	L:	mov rbx, qword[r8]	 |
-		mov qword[r9], rbx	 |
-		add r8, 08		 |
-		add r9, 08		 |
-		dec byte[cnt1]		_/
+					
+	mov byte[cnt1], 5h		 
+	mov r8, array1			 
+	mov r9, array2			 
+	L:	mov rbx, qword[r8]	 
+		mov qword[r9], rbx	 
+		add r8, 08		 
+		add r9, 08		 
+		dec byte[cnt1]		
 	jnz L
 
 	print msg2, len2		;after

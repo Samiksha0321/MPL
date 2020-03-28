@@ -4,8 +4,7 @@ section .data
 
     
 
-    menu    db      10,"-----------Menu----------"
-            db  10,"1. Hex to BCD "
+    menu:   db  10,"1. Hex to BCD "
             db  10,"2. BCD to Hex"
             db  10,"3. Exit "
             db  10
@@ -145,7 +144,7 @@ back1:  xor rdx,rdx
     call    display_16
 
     ret
-;------------------------------------------------------------------
+
 accept_16:
     read    buf,5       ; buflen = 4 + 1
 
@@ -181,7 +180,7 @@ sub30:  sub   al,30h        ; subtract 30h if no is in the range "0"-"9"
     inc rsi     ; point to next digit
     loop    next_digit
 ret
-;------------------------------------------------------------------
+
 display_16:
     mov     rsi,char_ans+3  ; load last byte address of char_ans in rsi
     mov     rcx,4       ; number of digits 

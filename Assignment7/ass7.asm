@@ -1,6 +1,10 @@
-;Write X86 program to sort the list of integers in ascending/descending
-;order. Read the input from the text file and write the sorted data back to
-;the same text file using bubble sort .
+%macro scall 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
 
 section .data
 msg0: db "1.Sorted Array is :",0x0A
@@ -17,11 +21,11 @@ msg5: db 0x0A,"The file is not open",0x0A
 len5: equ $-msg5
 msg6: db 0x0A,"Content of file is NOT read successfully",0x0A
 len6: equ $-msg6
-msg7: db 0x0A,"Enter The Character : ",0x0A
+msg7: db 0x0A,"The file is closed",0x0A
 len7: equ $-msg7
 endl: db 0x0A
 endlen: equ $-endl
-fname: db 'abc.text',0
+fname: db 'abc.txt',0
 
 section .bss
 buffer: resb 1000
@@ -33,19 +37,7 @@ result: resb 1
 length1: resb 8
 arr: resb 1000
 
-
-
-
-%macro scall 4
-mov rax,%1
-mov rdi,%2
-mov rsi,%3
-mov rdx,%4
-syscall
-%endmacro
-
-
-section .text
+section .txt
 global _start
 _start:
 
@@ -60,7 +52,9 @@ next:	scall 1,1,msg4,len4
 	mov qword[length1],rax
 
 	scall 1,1,buffer,1000
-
+	
+	scall 1,1,msg0,len0
+ ;Ascending
 	mov bx,07h
 upppp:	mov rcx,06h
 	mov rsi,buffer
@@ -79,11 +73,40 @@ nexttt:	add rsi,2
 	jnz upppp
 
 	scall 1,1,buffer,1000
-
+	scall 1,[fd],msg0,len0
 	scall 1,[fd],buffer,100
+
+;Descending
+	mov bx,07h
+upp:	mov rcx,06h
+	mov rsi,buffer
+	mov rdi,buffer+2
+up:	mov al,byte[rsi]
+	mov dl,byte[rdi]
+	cmp al,dl
+	jae nextt
+	mov byte[rsi],dl
+	mov byte[rdi],al
+nextt:	add rsi,2
+	add rdi,2
+	dec rcx
+	jnz up
+	dec bx
+	jnz upp
+	
+	scall 1,1,buffer,1000
+	scall 1,[fd],msg0,len0
+	scall 1,[fd],buffer,100
+
+	mov rax,3
+	mov rdi,[fd]
+	scall 1,1,msg7,len7
+
+
 exit:	mov rax,60
 	mov rdi,0
 	syscall
+
 
 
 

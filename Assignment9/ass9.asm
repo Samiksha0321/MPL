@@ -14,90 +14,88 @@
 	syscall
 %endmacro
 
+section .data
+	msgFact: db 'Factorial is:',0xa
+	msgFactSize: equ $-msgFact
+	newLine: db 10
+	section .bss
+	fact: resb 8
+	num: resb 2
 
-Section .data
-	title:	db "------ Factorial Program ------",0x0A
-		db "Enter Number : ",0x0A
-	title_len:	equ	$-title
-	factMsg:	db "Factorial is :", 0x0A
-	factMsg_len:	equ	$-factMsg
-	cnt:	db 00H
-	cnt2:	db 02H
-	num_cnt: db 00H
-
-
-Section .bss
-	number:	resb 2
-	factorial:	resb 8 
-
-
-Section .text
+section .txt
 global _start
 _start:
-	print	title, title_len
-	read	number,2
+	 pop rbx ;Remove number of arguments 
+	 pop rbx ;Remove the program name
+	 
+	 pop rbx ;Remove the actual number whoes factorial is to be calculated (Address of number)
+	 
+	 mov [num],rbx
 
-	mov	rsi,number     
-	call	AtoH   
+	 ;print number accepted from command line
+	 
+	print [num], 2
+	 
+	mov rsi,[num]
+	mov rcx,02
+	xor rbx,rbx
+	call aToH
+	 
+	 mov rax,rbx
+	 
+	 call factP
 
-FACTORIAL:
-	call	fact_proc
-	mov	rbx, rax
-	mov	rdi, factorial
-	call	HtoA_value
-	print	factorial, 8
+	 
+	 mov rcx,08
+	 mov rdi,fact
+	 xor bx,bx
+	 mov ebx,eax
+	 call hToA
 
-exit:
-	mov	rax, 60
-	mov	rdi, 0
-	syscall
+	print newLine, 1
+	print fact, 8
+	print newLine, 1	 
 
-fact_proc:
-	cmp	bl, 01H
-	jne	do_calc
-	mov	ax, 1
+	 mov rax,60
+	 mov rdi,0
+	 syscall
+
+factP:
+	dec rbx
+	cmp rbx,01
+	je comeOut
+	cmp rbx,00
+	je comeOut
+	mul rbx
+	call factP
+comeOut:
+	ret
+	aToH:
+	up1: rol bx,04
+	mov al,[rsi]
+	cmp al,39H
+	jbe A2
+	sub al,07H
+	A2: sub al,30H
+	add bl,al
+	inc rsi
+	loop up1
 ret
 
-do_calc:
-	push	rbx
-	dec	bl
-	call	fact_proc
-	pop	rbx
-	mul	bl
-ret
 
-AtoH:     
-	mov	byte[cnt],02H
-	mov	bx,00H
-	hup:
-	rol	bl,04
-	mov	al,byte[rsi]
-	cmp	al,39H
-	JBE	HNEXT
-	SUB	al,07H
-	HNEXT:
-	sub	al,30H
-	add	bl,al
-	INC	rsi
-	DEC	byte[cnt]
-	JNZ	hup
-ret
+hToA:   
+    d:  rol ebx,4
+	mov ax,bx
+	and ax,0fH 
+	cmp ax,09H 
+	jbe ii 
+	add ax,07H
+	 
+	ii: add ax,30H
+	mov [rdi],ax
+	inc rdi
+	loop d
 
-HtoA_value: 
-	mov	byte[cnt2], 08H
-aup1:
-	rol	ebx, 04
-	mov	cl, bl
-	and	cl, 0FH
-	cmp	cl, 09H
-	jbe	ANEXT1
-	add 	cl, 07H
-ANEXT1: 
-	add	cl, 30H
-	mov	byte[rdi],cl
-	inc 	rdi
-	dec	byte[cnt2]
-	jnz	aup1
-ret
-
+ ret
+ 
 

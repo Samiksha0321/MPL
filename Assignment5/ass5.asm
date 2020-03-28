@@ -1,13 +1,3 @@
-%macro scall 4
-mov rax,%1
-mov rdi,%2
-mov rsi,%3
-mov rdx,%4
-syscall
-%endmacro
-
-
-
 section .data
 msg0: db "1.Number of blank spaces :",0x0A
 len0: equ $-msg0
@@ -27,10 +17,7 @@ msg7: db 0x0A,"Enter The Character : ",0x0A
 len7: equ $-msg7
 endl: db 0x0A
 endlen: equ $-endl
-fname: db 'abc.text',0
-
-
-
+fname: db 'abc.txt',0
 
 section .bss
 global char,buffer,lenght1,length2,lenght3
@@ -43,7 +30,13 @@ length2: resb 8
 length3: resb 8
 buffer: resb 1000
 
-
+%macro scall 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
 
 section .text
 extern ent,spc,occ

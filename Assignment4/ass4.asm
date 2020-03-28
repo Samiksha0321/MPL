@@ -1,42 +1,34 @@
-%macro	print 2
-	mov	rax, 01h
-	mov	rdi, 01h
-	mov	rsi, %1
-	mov	rdx, %2
-	syscall
-%endmacro
-
-%macro	read 2
-	mov	rax, 00h
-	mov	rdi, 00h
-	mov	rsi, %1
-	mov	rdx, %2
-	syscall
-%endmacro
-
-
-
 section .data
-	msg:	db	0xA, "1.Succesive Addition", 0xA
-		db	"2.Shift method", 0xA
-		db	"3.EXIT", 0xA
-	len:	equ	$-msg
-	msg1:	db	"Enter the number", 0xA
-	len1:	equ	$-msg1
-	msg2:	db	"The Result is", 0xA
-	len2:	equ	$-msg2
+msg: db 0x0A,"1.Succesive Addition",0x0A
+     db "2.Shift method",0x0A
+     db "3.EXIT",0x0A
+len: equ $-msg
+msg1: db "Enter the number",0x0A
+len1: equ $-msg1
+msg2:db "The Result is",0x0A
+len2: equ $-msg2
 
 
 section .bss
 
-	num:	resb 2
-	number1:resb 3
-	number2:resb 3
-	num1:	resb 1
-	num2:	resb 1
-	result:	resb 4
-	res:	resb 4
-	cnt:	resb 2
+num: resb 2
+number1:resb 3
+number2:resb 3
+num1:resb 1
+num2:resb 1
+result:resb 4
+res:resb 4
+cnt: resb 2
+
+
+
+%macro scall 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
 
 
 
@@ -44,16 +36,16 @@ section .text
 global _start
 _start:
 
-	print	msg, len
-	read	num, 2
+	scall 1,1,msg,len
+	scall 0,1,num,2
 
-	cmp byte[num], 31H
+	cmp byte[num],31H
 	je first
 
-	cmp byte[num], 32H
+	cmp byte[num],32H
 	je second
 
-	cmp byte[num], 33H
+	cmp byte[num],33H
 	je exit
 
 first:  mov rax,00
@@ -61,16 +53,16 @@ first:  mov rax,00
 	mov rcx,00
 	mov rdx,00
 
-	print	msg1, len1
-	read	number1, 3
+	scall 1,1,msg1,len1
+	scall 0,1,number1,3
 	call atoh1
 	mov dl,bl
 	mov byte[num1],bl
 	
 	mov rbx,00
 
-	print	msg1, len1
-	read	number2, 3
+	scall 1,1,msg1,len1
+	scall 0,1,number2,3
 	call atoh2
 	mov cl,bl
 	mov byte[num2],bl
@@ -101,16 +93,16 @@ second:
 	mov rcx,00
 	mov rdx,00
 
-	print	msg1, len1
-	read	number1, 3
+	scall 1,1,msg1,len1
+	scall 0,1,number1,3
 	call atoh1
 	mov dl,bl
 	mov byte[num1],bl
 	
 	mov rbx,00
 
-	print	msg1, len1
-	read	number2, 3
+	scall 1,1,msg1,len1
+	scall 0,1,number2,3
 	call atoh2
 	mov cl,bl
 	mov byte[num2],bl
@@ -136,9 +128,12 @@ flag:	shl ax,01
 	call _start
 	
 		
-exit:	mov	rax, 60h
-	mov	rdi, 00h
+exit:	mov rax,60
+	mov rdi,0
 	syscall
+
+
+
 
 
 atoh1: 	mov rsi,number1
@@ -154,7 +149,7 @@ next1:	sub dl,30H
 	inc rsi
 	dec byte[cnt]
 	jnz up1	
-ret
+	ret
 
 
 
@@ -171,7 +166,7 @@ next2:	sub dl,30H
 	inc rsi
 	dec byte[cnt]
 	jnz up2
-ret
+	ret
 
 
 htoa:	mov rsi,result
@@ -182,13 +177,12 @@ upp:	rol dx,04
 	cmp cx,09H
 	jbe nextt
 	add cx,07H
-	
 nextt:	add cx,30H
 	mov word[rsi],cx
 	inc rsi
 	dec byte[cnt]
 	jnz upp
-	print	msg2, len2
-	print	result, 4
-ret
+	scall 1,1,msg2,len2
+	scall 1,1,result,4
+	ret
 
